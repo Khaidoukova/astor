@@ -1,0 +1,131 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+      <div class="jumbotron p-3 p-md-5 text-white rounded bg-warning">
+        <div class="col-md-12 px-0">
+          <h1 class="display-4">Добро пожаловать на наш сайт!</h1>
+          <p class="lead my-3">Прошу Вас тестировать функции данного сайта и отправлять все замечания мне на почту olga@noran.ru</p>
+
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+
+              <h3 class="mb-0">
+                <a class="text-dark" href=#>Подать заявку в УК</a>
+              </h3>
+              <div class="mb-1 text-muted"></div>
+              <p class="card-text mb-auto">Здесь Вы можете напрямую отправить срочную или не очень заявку в службу эксплуатации</p>
+
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+
+              <h3 class="mb-0">
+                <a class="text-dark" href="{% url 'main:office_list' %}">Доступ на территорию двора</a>
+              </h3>
+              <div class="mb-1 text-muted"></div>
+              <p class="card-text mb-auto">Отправьте заявку на доступ автотранспорта</p>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8 blog-main">
+          <h3 class="pb-3 mb-4 font-italic border-bottom">
+
+          </h3>
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Новости и объявления</h2>
+              <hr>
+            <p class="blog-post-meta">19 января 2024 года <a href="#"></a></p>
+
+            <p>В субботу  20.01.2024г будет производиться чистка двора</p>
+
+            <p>Просим Вас убрать Ваш автотранспорт с парковки перед зданием.</p>
+            <blockquote>
+              <p>Скидка 10% предоставляется при предъявлении подтверждающих документов для льготных категорий граждан:</p>
+            </blockquote>
+              <hr>
+<p class="blog-post-meta">15 января 2024 года <a href="#"></a></p>
+<p>В субботу 20.01.2024г будет производиться чистка двора</p>
+
+            <p>Просим Вас убрать Ваш автотранспорт с парковки перед зданием.</p>
+
+              <p>Читска будет производится на следующих площадках:</p>
+
+
+            <ul>
+              <li>верхняя парковка перед зданием</li>
+              <li>нижняя парковка вхоль ул. 8 Марта</li>
+              <li>парковка перед магазином Сантехмарт</li>
+              <li>парковка во дворе</li>
+
+            </ul>
+
+
+
+
+          </div><!-- /.blog-post -->
+
+
+
+          <nav class="blog-pagination">
+
+          </nav>
+
+        </div><!-- /.blog-main -->
+
+        <aside class="col-md-4 blog-sidebar">
+          <div class="p-3 mb-3 bg-light rounded">
+            <h4 class="font-italic">О нашей Управляющей компании НОРАН</h4>
+            <p class="mb-0"> Управляющая компания ООО «НОРАН» была создана в  1998 году и вот  уже более 10 лет успешно существует на рынке коммерческого и эксплуатационного управления объектами недвижимости, занимая достойное место среди  действительных  членов  Уральской Палаты Недвижимости </p>
+
+    <p> Сегодня, даже в условиях быстро меняющейся и не простой экономической ситуации, мы работаем для наших клиентов, сохраняя репутацию надежного, ответственного и верного партнера, предоставляющего услуги на уровне международного стандарта качества, способного решить вопросы любой степени сложности строго в соответствии с действующим законодательством Российской Федерации. </p>
+          </div>
+
+          <div class="p-3">
+            <h4 class="font-italic">Архив</h4>
+            <ol class="list-unstyled mb-0">
+              <li><a href="#">March 2014</a></li>
+              <li><a href="#">February 2014</a></li>
+              <li><a href="#">January 2014</a></li>
+              <li><a href="#">December 2013</a></li>
+              <li><a href="#">November 2013</a></li>
+              <li><a href="#">October 2013</a></li>
+              <li><a href="#">September 2013</a></li>
+              <li><a href="#">August 2013</a></li>
+              <li><a href="#">July 2013</a></li>
+              <li><a href="#">June 2013</a></li>
+              <li><a href="#">May 2013</a></li>
+              <li><a href="#">April 2013</a></li>
+            </ol>
+          </div>
+
+
+        </aside><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </main><!-- /.container -->
+
+ {% endblock %}
