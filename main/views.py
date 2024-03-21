@@ -117,6 +117,8 @@ class OfficeDeleteView(LoginRequiredMixin,
 
 class User_requestListView(ListView):
     model = User_request
+    template_name = 'main/user_request_list.html'
+    context_object_name = 'user_requests'
 
 
 class User_requestDetailView(DetailView):

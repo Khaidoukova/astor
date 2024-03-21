@@ -33,7 +33,7 @@
 
           </div>
           <div class="col-4 text-center">
-            <a class="blog-header-logo text-dark" href="#">Торгово-деловой центр АСТОР</a>
+            <h1>Торгово-деловой центр АСТОР</h1>
           </div>
           <div class="col-4 d-flex justify-content-end align-items-center">
             <a class="text-muted" href="#">
@@ -68,7 +68,7 @@
         <a class="p-2 text-muted" href="#">СВОБОДНЫЕ ОФИСЫ</a>
 
             {% if user.is_manager %}
-          <a class="p-2 text-muted" href="#">ПОСМОТРЕТЬ ВСЕ ЗАЯВКИ</a>
+          <a class="p-2 text-muted" href="{% url 'main:request_list' %}">ПОСМОТРЕТЬ ВСЕ ЗАЯВКИ</a>
 
             {% endif %}
           <a class="p-2 text-muted" href="{% url 'main:contacts' %}">КОНТАКТЫ</a>

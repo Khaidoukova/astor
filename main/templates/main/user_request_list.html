@@ -3,29 +3,69 @@
 
 {% block content %}
 
-<div class="row mb-2">
-    {% for req in user_requests %}
-        <div class="col-md-6">
-          <div class="card flex-md-row mb-4 box-shadow h-md-250">
-            <div class="card-body d-flex flex-column align-items-start">
+<div class="container mt-5">
+    <div class="row">
+        <h1 class="text-center">Заявки арендаторов</h1>
+        
+        
+    </div>
+</div>
 
-              <h3 class="mb-0">
-                <a class="text-dark" href="{% url 'main:company_detail' company.id %}">{{ company }}</a>
-              </h3>
 
-                {% if user.is_manager %}
-
-                <a href="{% url 'main:company_update' company.id %}"
-                       class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                    <a href="{% url 'main:labtest_delete' company.id %}"
-                       class="btn btn-sm btn-outline-danger">Удалить</a>
-
-                {% endif %}
-
+<div class="=container mt-5">
+    
+    <div class="container">
+        <div class="row text-center rounded border">
+            <div class="col-2">
+                <p>Дата</p>
             </div>
-
-          </div>
+            <div class="col-1">
+                <p>Помещение</p>
+            </div>
+            <div class="col-2">
+                <p>Арендатор</p>
+            </div>
+            <div class="col-3">
+                <p>Описание</p>
+            </div>
+            <div class="col-1">
+                <p>Срочность</p>
+            </div>
+            <div class="col-1">
+                <p>Статус</p>
+            </div>
+            <div class="col-2">
+                <p>Комментарий исполнителя</p>
+            </div>
         </div>
-    {% endfor %}
+        {% for req in user_requests %}
+        <div class="row text-center rounded border">
+            <div class="col-2">
+                <p>{{ req.date }}</p>
+            </div>
+            <div class="col-1">
+                <p>{{ req.office_id }}</p>
+            </div>
+            <div class="col-2">
+                <p>{{ req.owner.name }}</p>
+            </div>
+            <div class="col-3">
+                <p>{{ req.description }}</p>
+            </div>
+            <div class="col-1">
+                <p>{{ req.urgency }}</p>
+            </div>
+            <div class="col-1">
+                <p>{{ req.status }}</p>
+            </div>
+            <div class="col-2">
+                <p>{{ req.comments }}</p>
+            </div>
+            
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 
 {% endblock %}

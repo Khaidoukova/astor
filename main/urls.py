@@ -31,5 +31,6 @@ urlpatterns = [
     path('car_update/<int:pk>', CarsUpdateView.as_view(), name='car_update'),
     path('car_delete/<int:pk>', CarsDeleteView.as_view(), name='car_delete'),
     path('request_create/', User_requestCreateView.as_view(), name='request_create'),
+    path('request_list/', User_requestListView.as_view(), name='request_list'),
     path('request_update/<int:pk>', User_requestUpdateView.as_view(), name='request_update')
 ]
