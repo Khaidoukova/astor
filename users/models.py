@@ -12,6 +12,9 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, verbose_name='телефон', null=True, blank=True)
     is_staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     is_manager = models.BooleanField(default=False, verbose_name='Менеджер')
+    tg_account = models.CharField(max_length=50, verbose_name='аккаунт в telegram', null=True, blank=True)
+    get_updates = models.BooleanField(default=False, verbose_name='Получать уведомления на почту')
+    get_updates_tg = models.BooleanField(default=False, verbose_name='Получать уведомления на telegram')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

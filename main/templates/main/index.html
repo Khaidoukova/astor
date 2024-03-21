@@ -17,7 +17,11 @@
             <div class="card-body d-flex flex-column align-items-start">
 
               <h3 class="mb-0">
-                <a class="text-dark" href=#>Подать заявку в УК</a>
+                  {% if user.is_authenticated %}
+                      <a class="text-dark" href="{% url 'main:request_create' %}">Подать заявку в УК</a>
+                  {% else %}
+                      <a href="{% url 'users:login' %}">Подать заявку в УК</a>
+                  {% endif %}
               </h3>
               <div class="mb-1 text-muted"></div>
               <p class="card-text mb-auto">Здесь Вы можете напрямую отправить срочную или не очень заявку в службу эксплуатации</p>
@@ -33,10 +37,10 @@
             <div class="card-body d-flex flex-column align-items-start">
 
               <h3 class="mb-0">
-                <a class="text-dark" href="{% url 'main:office_list' %}">Доступ на территорию двора</a>
+                <a class="text-dark" href="{% url 'main:office_list' %}">Доступ для авто</a>
               </h3>
               <div class="mb-1 text-muted"></div>
-              <p class="card-text mb-auto">Отправьте заявку на доступ автотранспорта</p>
+              <p class="card-text mb-auto">Здесь Вы можете отправить заявку на доступ автотранспорта на территорию двора</p>
 
             </div>
 

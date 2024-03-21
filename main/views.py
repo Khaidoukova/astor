@@ -128,11 +128,15 @@ class User_requestCreateView(CreateView):
     form_class = User_requestForm
     success_url = reverse_lazy('main:index')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['initial'] = {'owner': self.request.user}
+        kwargs['request'] = self.request
+        return kwargs
+
     def form_valid(self, form):
         self.object = form.save()
-        self.object.owner = self.request.user
         self.object.save()
-
         return super().form_valid(form)
 
 

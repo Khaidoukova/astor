@@ -22,13 +22,13 @@
     <link href="/static/css/blog.css" rel="stylesheet">
   </head>
 
-  <body>
+  <body class="d-flex flex-column min-vh-100">
 
     <div class="container">
       <header class="blog-header py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
           <div class="col-4 pt-1">
-              <img src="media/logo_astor.jpg" width="110" height="100">
+              <img src="/media/logo_astor.jpg" width="110" height="100">
 
 
           </div>
@@ -42,13 +42,16 @@
               <nav class="nav d-flex justify-content-between">
             {% if user.is_authenticated %}
                   <div class="header">
-            <a class="text-muted" href="{% url 'users:profile' %}">Профиль</a>
-            <a class="text-muted" href="{% url 'users:logout' %}">Выйти</a>
+            <a class="btn btn-outline-dark me-2" href="{% url 'users:user_detail' pk=user.pk %}">Профиль</a>
+            <form action="{% url 'users:logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit"  class="btn btn-outline-dark me-2">Выйти</button>
+            </form>
                       </div>
         {% else %}
                   <div class="header">
-            <a class="text-muted" href="{% url 'users:login' %}">Войти</a>
-            <a class="text-muted" href="{% url 'users:register' %}">Регистрация</a>
+            <a class="btn btn-outline-dark me-2" href="{% url 'users:login' %}">Войти</a>
+            <a class="btn btn-outline-dark me-2" href="{% url 'users:register' %}">Регистрация</a>
                       </div>
         {% endif %}
 
@@ -59,8 +62,8 @@
       <div class="nav-scroller py-1 mb-2">
         <nav class="nav d-flex justify-content-between">
           <a class="p-2 text-muted" href="{% url 'main:index' %}">ГЛАВНАЯ</a>
-          <a class="p-2 text-muted" href="#">ПОДАТЬ ЗАЯВКУ</a>
-          <a class="p-2 text-muted" href="#">ОБЪЯВЛЕНИЯ</a>
+          <a class="p-2 text-muted" href="#">О НАШЕЙ КОМПАНИИ</a>
+
           <a class="p-2 text-muted" href="#">НАШИ АРЕНДАТОРЫ</a>
         <a class="p-2 text-muted" href="#">СВОБОДНЫЕ ОФИСЫ</a>
 
@@ -82,7 +85,7 @@
 </div>
 
 
-<footer class="text-muted">
+<footer class="text-muted flex-shrink-0 mt-auto">
     <div class="container">
         <p class="float-right">
             <a href="#"></a>

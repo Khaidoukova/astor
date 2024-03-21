@@ -4,14 +4,22 @@ import string
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView
 
-from users.forms import UserRegisterForm, UserForm
+from main.models import User_request, Cars
+from users.forms import UserRegisterForm, UserForm, UserLoginForm
 from users.models import User
+
+
+class UserLoginView(LoginView):
+    model = User
+    template_name = 'users/login.html'
+    form_class = UserLoginForm
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -41,20 +49,23 @@ class ProfileView(UpdateView):
 
 class UserDetailView(DetailView):
     model = User
+    context_object_name = 'object_user'
 
     def get_object(self, queryset=None):
         return self.request.user
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
 
-@login_required
-def generate_password(request):
-    new_password = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-    request.user.set_password(new_password)
-    request.user.save()
-    send_mail(
-        subject='Поступил запрос на смену пароля',
-        message=f'Ваш новый пароль: {new_password}',
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[request.user.email],
-    )
-    return redirect(reverse_lazy('users:login'))
+        user_requests = User_request.objects.filter(owner=user)
+        context['user_requests'] = user_requests
+
+        cars = Cars.objects.filter(owner=user)
+        context['cars'] = cars
+
+        # Проверяем, является ли текущий пользователь владельцем страницы
+        is_owner = self.request.user == user
+        context['is_owner'] = is_owner
+
+        return context

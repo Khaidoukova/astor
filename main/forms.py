@@ -27,13 +27,23 @@ class OfficeForm(StyleFormMixin, forms.ModelForm):
 class User_requestForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = User_request
-        fields = ('date', 'office_id', 'owner', 'description', 'urgency', 'status', 'comments')
+        fields = ('office_id', 'description', 'urgency', 'status', 'comments', 'owner')
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+        if not self.request.user.is_staff:
+            self.fields['comments'].widget = forms.HiddenInput()
+
 
 
 class BookingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Booking
         fields = ('date', 'duration', 'owner')
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
     def clean_date(self):
         day = self.cleaned_data['date']
@@ -45,6 +55,7 @@ class BookingForm(StyleFormMixin, forms.ModelForm):
                 code='invalid'
             )
         return day
+
 
 class CarsForm(StyleFormMixin, forms.ModelForm):
     class Meta:

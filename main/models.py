@@ -63,7 +63,7 @@ class User_request(models.Model):
                                default=NOT_URGENT, verbose_name='срочность')
     status = models.CharField(max_length=20, choices=STATUS,
                               default=IN_PROGRESS, verbose_name='статус')
-    comments = models.TextField(verbose_name='комментарий')
+    comments = models.TextField(verbose_name='комментарий', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Заявка'
@@ -76,9 +76,9 @@ class User_request(models.Model):
 
 class Booking(models.Model):
     TIMESLOT_LIST = (
-        (0, '09:00 – 18:00'),
-        (1, '9:00 – 13:00'),
-        (2, '13:00 – 18:00'),
+        (0, 'первая половина дня'),
+        (1, 'вторая половина дня'),
+        (2, 'весь день'),
 
     )
     date = models.DateField(default=timezone.now, verbose_name='дата')
