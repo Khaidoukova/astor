@@ -3,10 +3,11 @@
 
 {% block content %}
 
-      <div class="jumbotron p-3 p-md-5 text-white rounded bg-warning">
+      <div class="jumbotron p-3 p-md-5 text-darkgrey rounded bg-lightgrey">
         <div class="col-md-12 px-0">
           <h1 class="display-4">Добро пожаловать на наш сайт!</h1>
           <p class="lead my-3">Прошу Вас тестировать функции данного сайта и отправлять все замечания мне на почту olga@noran.ru</p>
+            <p class="lead my-3">После регистрации на Вашей странице в профиле Вы сможете отслеживать все Ваши заявки.</p>
 
         </div>
       </div>
@@ -20,7 +21,7 @@
                   {% if user.is_authenticated %}
                       <a class="text-dark" href="{% url 'main:request_create' %}">Подать заявку в УК</a>
                   {% else %}
-                      <a href="{% url 'users:login' %}">Подать заявку в УК</a>
+                      <a class="text-dark" href="{% url 'users:login' %}">Подать заявку в УК</a>
                   {% endif %}
               </h3>
               <div class="mb-1 text-muted"></div>
@@ -37,7 +38,11 @@
             <div class="card-body d-flex flex-column align-items-start">
 
               <h3 class="mb-0">
-                <a class="text-dark" href="{% url 'main:office_list' %}">Доступ для авто</a>
+                   {% if user.is_authenticated %}
+                <a class="text-dark" href="{% url 'main:car_create' %}">Доступ для авто</a>
+                   {% else %}
+                      <a class="text-dark" href="{% url 'users:login' %}">Доступ для авто</a>
+                  {% endif %}
               </h3>
               <div class="mb-1 text-muted"></div>
               <p class="card-text mb-auto">Здесь Вы можете отправить заявку на доступ автотранспорта на территорию двора</p>
@@ -70,21 +75,9 @@
               <p>Скидка 10% предоставляется при предъявлении подтверждающих документов для льготных категорий граждан:</p>
             </blockquote>
               <hr>
-<p class="blog-post-meta">15 января 2024 года <a href="#"></a></p>
-<p>В субботу 20.01.2024г будет производиться чистка двора</p>
-
-            <p>Просим Вас убрать Ваш автотранспорт с парковки перед зданием.</p>
-
-              <p>Читска будет производится на следующих площадках:</p>
-
-
-            <ul>
-              <li>верхняя парковка перед зданием</li>
-              <li>нижняя парковка вхоль ул. 8 Марта</li>
-              <li>парковка перед магазином Сантехмарт</li>
-              <li>парковка во дворе</li>
-
-            </ul>
+         <h2 class="blog-post-title">Акции наших арендаторов</h2>
+<p class="blog-post-meta">20 марта 2024 года <a href="#"></a></p>
+<p>супер пупер предложение</p>
 
 
 

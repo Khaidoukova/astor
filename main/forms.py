@@ -30,7 +30,7 @@ class User_requestForm(StyleFormMixin, forms.ModelForm):
         fields = ('office_id', 'description', 'urgency', 'status', 'comments', 'owner')
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request')
+        self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         if not self.request.user.is_staff:
             self.fields['comments'].widget = forms.HiddenInput()
@@ -60,4 +60,11 @@ class BookingForm(StyleFormMixin, forms.ModelForm):
 class CarsForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Cars
-        fields = ('car_id', 'model', 'description', 'price', 'owner')
+        fields = ('car_id', 'model', 'period', 'status', 'price')
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+        if not self.request.user.is_manager:
+            self.fields['price'].widget = forms.HiddenInput()
+            self.fields['status'].widget = forms.HiddenInput()

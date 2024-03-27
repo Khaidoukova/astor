@@ -33,9 +33,9 @@
                       <div class="col-md-12 border p-3 m-3">
 
                             {% if user_requests %}
-                                <h2>Ваши заявки</h2>
+                                <h2 class="bg-secondary text-light p-2">Ваши заявки</h2>
                                   {% for req in user_requests %}
-                          <div class="col-md-4">
+                          <div class="col-md-offset-12">
                                     <p><b>Дата:</b> {{ req.date }}</p>
                                   <p><b>Офис:</b> {{ req.office_id }}</p>
                               <p><b>Описание:</b> {{ req.description }}</p>
@@ -48,43 +48,34 @@
             <hr>
         {% endif %}
 
-
                                   {% endfor %}
                             {% else %}
                                 <p>У вас пока нет отправленных заявок в Службу Эксплуатаци</p>
                             {% endif %}
 
-                          <div class="row p-2">
-                                <h2>Доступ автомобилей на территорию</h2>
-                              {% if is_owner %}
-                                <div class="col-md-3 p-3">
 
-                                </div>
-                              {% endif %}
+                                <h2 class="bg-secondary text-light p-2">Доступ автомобилей на территорию</h2>
+                            {% if cars %}
                                     {% for car in cars %}
-                                    <div class="col-md-12">
-                                        <div class="card mb-4 box-shadow">
-                                            <div class="card-body">
-                                                <div class="row m-1">
-                                                    <div class="col-md-3">
+                                        <div class="col-md-12">
+
                                                         <p><b>Номер авто</b> {{ car.car_id }}</p>
                                                         <p><b>Модель</b> {{ car.model }}</p>
-                                                        {% if car.description %}
-                                                        <p><b>Описание</b> {{ car.description }}</p>
-                                                        {% endif %}
+                                                        <p><b>Статус запроса</b> {{ car.status }}</p>
+</div>
+                                      {% if not loop.last %}
+            <hr>
+        {% endif %}
 
+                                {% endfor %}
+                            {% else %}
+                                <p>У вас пока нет запросов на доступ авто на территорию</p>
+                            {% endif %}
 
-                                                    {% if is_owner %}
-                                                    <div class="col-md-3">
-                                                        <a href="{% url 'main:car_update' pk=car.pk %}" class="btn btn-primary btn-sm">Изменить</a>
-                                                        <a href="{% url 'main:car_delete' pk=car.pk %}" class="btn btn-danger btn-sm">Удалить</a>
-                                                    </div>
-                                                    {% endif %}
-                                                </div>
+       </div>
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
                                 </div>
                             </div>
 

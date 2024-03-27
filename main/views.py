@@ -155,6 +155,11 @@ class User_requestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
         else:
             return False
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
 
 class User_requestDeleteView(LoginRequiredMixin,
                              PermissionRequiredMixin,
@@ -187,8 +192,14 @@ class CarsDetailView(DetailView):
 
 class CarsCreateView(CreateView):
     model = Cars
+    template_name = 'main/car_form.html'
     form_class = CarsForm
     success_url = reverse_lazy('main:index')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def form_valid(self, form):
         self.object = form.save()

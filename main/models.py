@@ -68,7 +68,7 @@ class User_request(models.Model):
     class Meta:
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
-        ordering = ('date',)
+        ordering = ('-date',)
 
     def __str__(self):
         return f'{self.description}'
@@ -101,10 +101,27 @@ class Booking(models.Model):
 
 
 class Cars(models.Model):
+    ONE_TIME = 'разовый'
+    WEEK = 'на неделю'
+    TWO_WEEKS = 'две недели'
+    MONTH = 'на месяц'
+    PERMANENT = 'на постоянной основе'
+    PERIOD = ((ONE_TIME, 'разовый'),
+              (WEEK, 'на неделю'),
+              (TWO_WEEKS, 'две недели'),
+              (MONTH, 'на месяц'),
+              (PERMANENT, 'на постоянной основе'))
+
+    APPROVED = 'Согласовано'
+    IN_PROGRESS = 'Отправлено на согласование'
+    STATUS = ((APPROVED, 'Согласовано'), (IN_PROGRESS, 'Отправлено на согласование'))
+
     car_id = models.CharField(max_length=100, verbose_name='номер авто', unique=True)
     model = models.CharField(max_length=100, verbose_name='модель')
-    description = models.TextField(verbose_name='описание',
-                                   null=True, blank=True)
+    period = models.CharField(max_length=20, choices=PERIOD,
+                              default=PERMANENT, verbose_name='период выдачи разрешения на доступ')
+    status = models.CharField(max_length=100, choices=STATUS,
+                              default=IN_PROGRESS, verbose_name='статус')
     price = models.IntegerField(verbose_name='цена',
                                 null=True, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
