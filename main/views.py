@@ -8,6 +8,8 @@ from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView,
                                   DeleteView, TemplateView)
 
+from announcements.models import Announcement
+from news.models import News
 from .forms import CompanyForm, OfficeForm, User_requestForm, BookingForm, CarsForm
 from .models import Company, Office, User_request, Booking, Cars
 
@@ -37,6 +39,9 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['announcements'] = Announcement.objects.all().order_by('-created_at')
+        context['news'] = News.objects.all()
+
         return context
 
 

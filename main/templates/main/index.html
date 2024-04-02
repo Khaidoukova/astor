@@ -76,8 +76,20 @@
             </blockquote>
               <hr>
          <h2 class="blog-post-title">Акции наших арендаторов</h2>
-<p class="blog-post-meta">20 марта 2024 года <a href="#"></a></p>
-<p>супер пупер предложение</p>
+<a class="text-dark" href="{% url 'announcements:list' %}">В этом разделе арендаторы ДЦ Астор могут оставлять свои объявления и специальные предложения </a></p>
+              <hr>
+{% for object in announcements %}
+<div class="col-md-offset-12">
+<p class="blog-post-meta">{{ object.created_at }}</p>
+<p><a href="{% url 'announcements:view' object.slug %}" style="color: black;">{{ object.title }}</a></p>
+                                   
+                                  
+                             
+                          </div>
+                                      {% if not loop.last %}
+            <hr>
+    {% endif %}
+{% endfor %}
 
 
 

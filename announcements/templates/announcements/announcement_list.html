@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Объявления и спецпредложения от арендаторов АД Астор</h1>
+</div>
+<div class="col-12 mb-5">
+
+</div>
+{% for object in object_list %}
+<div class="col-md-offset-12">
+                                    <p><b> {{ object.title }}</b></p>
+                                  <p>{{ object.body }}</p>
+                              <p>
+                          </div>
+                                      {% if not loop.last %}
+            <hr>
+    {% endif %}
+{% endfor %}
+    {% if user.is_authenticated %}
+    <a class="bg-secondary text-light p-2" href="{% url 'announcements:create' %}">Добавить свое объявление</a>
+{% endif %}
+    <p></p>
+     <p></p>
+     <p></p>
+     <p></p>
+
+{% endblock %}

@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('main.urls', namespace='main')),
     path('users/', include('users.urls', namespace='users')),
     path('news/', include('news.urls', namespace='news')),
+    path('announcements/', include('announcements.urls', namespace='announcements')),
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
          name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'), name='password_reset_done'),
