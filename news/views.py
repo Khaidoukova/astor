@@ -26,16 +26,16 @@ class NewsCreateView(CreateView):
             self.object.save()
 
             # Отправка сообщения в телеграм
-            bot = Bot(token=settings.TOKEN)
-            users = User.objects.filter(receive_notifications_email=True)
+
+            users = User.objects.filter(get_updates=True)
 
             for user in users:
                 if user.get_updates:
                     send_mail(
                         subject=f"ДЦ Астор: {self.object.title}",
-                        message = f"{self.object.body}",
-                        from_email = settings.EMAIL_HOST_USER,
-                        recipient_list = [user.email]
+                        message=f"{self.object.body}",
+                        from_email=settings.EMAIL_HOST_USER,
+                        recipient_list=[user.email]
                     )
 
 

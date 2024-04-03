@@ -66,16 +66,21 @@
           <div class="blog-post">
             <h2 class="blog-post-title">Новости и объявления</h2>
               <hr>
-            <p class="blog-post-meta">19 января 2024 года <a href="#"></a></p>
-
-            <p>В субботу  20.01.2024г будет производиться чистка двора</p>
-
-            <p>Просим Вас убрать Ваш автотранспорт с парковки перед зданием.</p>
-            <blockquote>
-              <p>Скидка 10% предоставляется при предъявлении подтверждающих документов для льготных категорий граждан:</p>
-            </blockquote>
+            {% for object in news %}
+<div class="col-md-offset-12">
+<p class="blog-post-meta">{{ object.date }}</p>
+    <p><b><a href="{% url 'news:view' object.slug %}" style="color: black;">{{ object.title }}</a></b></p>
+    <p>{{ object.body }}</p>
+                                   
+                                  
+                             
+                          </div>
+                                      {% if not loop.last %}
+            <hr>
+    {% endif %}
+{% endfor %}
               <hr>
-         <h2 class="blog-post-title">Акции наших арендаторов</h2>
+         <h2 class="blog-post-title">Акции и объявления наших арендаторов</h2>
 <a class="text-dark" href="{% url 'announcements:list' %}">В этом разделе арендаторы ДЦ Астор могут оставлять свои объявления и специальные предложения </a></p>
               <hr>
 {% for object in announcements %}
@@ -115,18 +120,18 @@
           <div class="p-3">
             <h4 class="font-italic">Архив</h4>
             <ol class="list-unstyled mb-0">
-              <li><a href="#">March 2014</a></li>
-              <li><a href="#">February 2014</a></li>
-              <li><a href="#">January 2014</a></li>
-              <li><a href="#">December 2013</a></li>
-              <li><a href="#">November 2013</a></li>
-              <li><a href="#">October 2013</a></li>
-              <li><a href="#">September 2013</a></li>
-              <li><a href="#">August 2013</a></li>
-              <li><a href="#">July 2013</a></li>
-              <li><a href="#">June 2013</a></li>
-              <li><a href="#">May 2013</a></li>
-              <li><a href="#">April 2013</a></li>
+              <li><a href="#">March 2024</a></li>
+              <li><a href="#">February 2024</a></li>
+              <li><a href="#">January 2024</a></li>
+              <li><a href="#">December 2023</a></li>
+              <li><a href="#">November 2023</a></li>
+              <li><a href="#">October 2023</a></li>
+              <li><a href="#">September 2023</a></li>
+              <li><a href="#">August 2023</a></li>
+              <li><a href="#">July 2023</a></li>
+              <li><a href="#">June 2023</a></li>
+              <li><a href="#">May 2023</a></li>
+              <li><a href="#">April 2023</a></li>
             </ol>
           </div>
 

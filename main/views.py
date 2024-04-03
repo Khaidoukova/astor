@@ -234,3 +234,7 @@ class CarsDeleteView(LoginRequiredMixin,
     model = Cars
     success_url = reverse_lazy('main:index')
     permission_required = 'main.delete_testcategory'
+
+
+def info(request):
+    return render(request, 'main/info.html')

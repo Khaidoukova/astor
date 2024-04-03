@@ -6,7 +6,7 @@ from main.views import (CompanyListView, CompanyDetailView,
                         OfficeUpdateView, contacts, CompanyDeleteView,
                         OfficeDeleteView, BookingCreateView, CarsListView, CarsDetailView,
                         CarsCreateView, CarsUpdateView, CarsDeleteView, User_requestCreateView, User_requestListView,
-                        User_requestDetailView, User_requestDeleteView, User_requestUpdateView)
+                        User_requestDetailView, User_requestDeleteView, User_requestUpdateView, info)
 
 app_name = MainConfig.name
 
@@ -32,5 +32,6 @@ urlpatterns = [
     path('car_delete/<int:pk>', CarsDeleteView.as_view(), name='car_delete'),
     path('request_create/', User_requestCreateView.as_view(), name='request_create'),
     path('request_list/', User_requestListView.as_view(), name='request_list'),
-    path('request_update/<int:pk>', User_requestUpdateView.as_view(), name='request_update')
+    path('request_update/<int:pk>', User_requestUpdateView.as_view(), name='request_update'),
+    path('info/', info, name='info'),
 ]
