@@ -17,22 +17,35 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat+Display:700,900" rel="stylesheet">
     <link href="/static/css/blog.css" rel="stylesheet">
     <style>
-     
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
 
-  .container {
-    flex: 1;
-  }
+  body {
+      display: flex;
+      flex-flow: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      flex: 1;
+    }
+    .btn-custom {
+    background-color: #FF4500; /* Установите нужный цвет в формате HEX */
+    border-color: #FF4500;
+    color: #ffffff; /* Установите цвет текста на кнопке */
+}
+
+.btn-custom:hover {
+    background-color: #FF8C00; /* Изменение цвета кнопки при наведении */
+    border-color: #FF8C00;
+}
+.hr-custom {
+    border-top: 2px solid #FF4500; /* Установите нужный цвет в формате HEX */
+}
     </style>
   </head>
 
-  <body class="d-flex flex-column">
+  <body>
 
-    <div class="container flex-shrink-0">
+    <div class="container">
       <header class="blog-header py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
           <div class="col-4 pt-1">
@@ -48,16 +61,16 @@
             <nav class="nav d-flex justify-content-between">
               {% if user.is_authenticated %}
                 <div class="header">
-                  <a class="btn btn-outline-dark me-2" href="{% url 'users:user_detail' pk=user.pk %}">Профиль</a>
+                  <a class="btn btn-custom" href="{% url 'users:user_detail' pk=user.pk %}">Профиль</a>
                   <form action="{% url 'users:logout' %}" method="post" class="d-inline">
                       {% csrf_token %}
-                      <button type="submit"  class="btn btn-outline-dark me-2">Выйти</button>
+                      <button type="submit"  class="btn btn-custom">Выйти</button>
                   </form>
                 </div>
               {% else %}
                 <div class="header">
-                  <a class="btn btn-outline-dark me-2" href="{% url 'users:login' %}">Войти</a>
-                  <a class="btn btn-outline-dark me-2" href="{% url 'users:register' %}">Регистрация</a>
+                  <a class="btn btn-custom" href="{% url 'users:login' %}">Войти</a>
+                  <a class="btn btn-custom" href="{% url 'users:register' %}">Регистрация</a>
                 </div>
               {% endif %}
             </nav>
@@ -83,12 +96,12 @@
 </main>
     </div>
 
-    <footer class="text-muted fixed-bottom">
+    <footer class="text-muted">
       <div class="container">
         <p class="float-right">
           <a href="#"></a>
         </p>
-        <p>Хайдукова&copy; {% now 'Y' %}</p>
+        <p class="mb-2">Хайдукова&copy; {% now 'Y' %}</p>
       </div>
     </footer>
 

@@ -59,40 +59,38 @@
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8 blog-main">
-          <h3 class="pb-3 mb-4 font-italic border-bottom">
-
-          </h3>
+          
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Новости и объявления</h2>
-              <hr>
+            <h2 class="bg-secondary text-light p-2">Новости и объявления</h2>
+              
             {% for object in news %}
 <div class="col-md-offset-12">
 <p class="blog-post-meta">{{ object.date }}</p>
     <p><b><a href="{% url 'news:view' object.slug %}" style="color: black;">{{ object.title }}</a></b></p>
     <p>{{ object.body }}</p>
-                                   
-                                  
-                             
+
+
+
                           </div>
                                       {% if not loop.last %}
-            <hr>
+            <hr class="hr-custom">
     {% endif %}
 {% endfor %}
-              <hr>
-         <h2 class="blog-post-title">Акции и объявления наших арендаторов</h2>
+             
+         <h2 class="bg-secondary text-light p-2">Акции и объявления наших арендаторов</h2>
 <a class="text-dark" href="{% url 'announcements:list' %}">В этом разделе арендаторы ДЦ Астор могут оставлять свои объявления и специальные предложения </a></p>
-              <hr>
+             
 {% for object in announcements %}
 <div class="col-md-offset-12">
 <p class="blog-post-meta">{{ object.created_at }}</p>
 <p><a href="{% url 'announcements:view' object.slug %}" style="color: black;">{{ object.title }}</a></p>
-                                   
-                                  
-                             
+
+
+
                           </div>
                                       {% if not loop.last %}
-            <hr>
+            <hr class="hr-custom">
     {% endif %}
 {% endfor %}
 
@@ -117,23 +115,7 @@
     <p> Сегодня, даже в условиях быстро меняющейся и не простой экономической ситуации, мы работаем для наших клиентов, сохраняя репутацию надежного, ответственного и верного партнера, предоставляющего услуги на уровне международного стандарта качества, способного решить вопросы любой степени сложности строго в соответствии с действующим законодательством Российской Федерации. </p>
           </div>
 
-          <div class="p-3">
-            <h4 class="font-italic">Архив</h4>
-            <ol class="list-unstyled mb-0">
-              <li><a href="#">March 2024</a></li>
-              <li><a href="#">February 2024</a></li>
-              <li><a href="#">January 2024</a></li>
-              <li><a href="#">December 2023</a></li>
-              <li><a href="#">November 2023</a></li>
-              <li><a href="#">October 2023</a></li>
-              <li><a href="#">September 2023</a></li>
-              <li><a href="#">August 2023</a></li>
-              <li><a href="#">July 2023</a></li>
-              <li><a href="#">June 2023</a></li>
-              <li><a href="#">May 2023</a></li>
-              <li><a href="#">April 2023</a></li>
-            </ol>
-          </div>
+        
 
 
         </aside><!-- /.blog-sidebar -->

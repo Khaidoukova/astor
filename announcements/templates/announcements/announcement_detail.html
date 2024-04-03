@@ -24,8 +24,8 @@
         </div>
     </div>
     {% if is_owner %}
-    <a href="{% url 'announcements:edit' object.slug %}" class="btn btn-primary btn-sm">Изменить</a>
-        <a href="{% url 'announcements:delete' object.slug %}" class="btn btn-danger btn-sm">Удалить</a>
+    <a href="{% url 'announcements:edit' object.slug %}" class="btn btn-custom">Изменить</a>
+        <a href="{% url 'announcements:delete' object.slug %}" class="btn btn-custom">Удалить</a>
     {% endif %}
 
 {% endblock %}

@@ -11,7 +11,7 @@
                    <form method="post" enctype="multipart/form-data">
                        {% csrf_token %}
                        {{ form.as_p }}
-                       <button type="submit" class="btn btn-success">
+                       <button type="submit" class="btn btn-custom">
                            {% if object %}
                                 Сохранить
                            {% else %}

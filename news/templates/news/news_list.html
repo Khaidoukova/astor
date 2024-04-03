@@ -4,7 +4,7 @@
     <h1 class="display-4">Новости и объявления</h1>
 </div>
 <div class="col-12 mb-5">
-    <a class="btn btn-outline-primary" href="{% url 'news:create' %}">Добавить новость</a>
+    <a class="btn btn-custom" href="{% url 'news:create' %}">Добавить новость</a>
 </div>
 {% for object in object_list %}
 <div class="col-md-4">
@@ -16,12 +16,12 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                     <a href="{% url 'news:view' object.slug %}"
-                       class="btn btn-sm btn-outline-secondary">Посмотреть</a>
+                       class="btn btn-custom">Посмотреть</a>
                     {% if user.is_staff %}
                     <a href="{% url 'news:edit' object.slug %}"
-                       class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                       class="btn btn-custom">Редактировать</a>
                     <a href="{% url 'news:delete' object.slug %}"
-                       class="btn btn-sm btn-outline-danger">Удалить</a>
+                       class="btn btn-custom">Удалить</a>
                     {% endif %}
                 </div>
 
