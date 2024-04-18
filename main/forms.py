@@ -40,7 +40,7 @@ class User_requestForm(StyleFormMixin, forms.ModelForm):
 class BookingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ('date', 'duration', 'owner')
+        fields = ('date', 'duration',)
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }

@@ -1,37 +1,26 @@
+from django.conf import settings
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin,
                                         UserPassesTestMixin)
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.utils import timezone
+
 from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView,
-                                  DeleteView, TemplateView)
+                                  DeleteView, TemplateView, View)
 
 from announcements.models import Announcement
 from news.models import News
 from .forms import CompanyForm, OfficeForm, User_requestForm, BookingForm, CarsForm
 from .models import Company, Office, User_request, Booking, Cars
+from .tasks import request_to_telegram
 
 
 def contacts(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        phone_number = request.POST.get('phone_number')
-        message = request.POST.get('message')
-
-        send_mail(
-            name,
-            message,
-            phone_number,
-            ['olga@noran.ru'],
-
-        )
-    context = {
-        'title': 'Контакты',
-    }
-
-    return render(request, 'main/contacts.html', context)
+    return render(request, 'main/contacts.html')
 
 
 class IndexView(TemplateView):
@@ -125,6 +114,31 @@ class User_requestListView(ListView):
     template_name = 'main/user_request_list.html'
     context_object_name = 'user_requests'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = User_request.STATUS
+        return context
+
+
+class User_requestStatusUpdateView(View):
+    def post(self, request, *args, **kwargs):
+        request_id = kwargs['pk']
+        new_status = request.POST.get('new_status')
+
+        req = get_object_or_404(User_request, pk=request_id)
+
+        if new_status != req.status:  # Проверка изменения статуса
+            req.status = new_status
+
+            if new_status == User_request.DONE:  # Проверка статуса на "выполнено"
+                req.date_completed = timezone.now()  # Запись текущей даты выполнения
+            elif req.date_completed is not None:  # Проверка наличия даты выполнения
+                req.date_completed = None  # Сброс даты выполнения, если статус изменен на другой
+
+            req.save()
+        return redirect('main:request_list')
+
+
 
 class User_requestDetailView(DetailView):
     model = User_request
@@ -143,7 +157,8 @@ class User_requestCreateView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        self.object.save()
+        if self.object.urgency == 'срочно':  # Check if urgency is "срочно"
+            request_to_telegram(self.object.description, self.object.office_id)  # Call the function to send telegram message
         return super().form_valid(form)
 
 
@@ -174,6 +189,26 @@ class User_requestDeleteView(LoginRequiredMixin,
     # permission_required = 'main.delete_testcategory'
 
 
+def send_feedback(request):
+    IN_PROGRESS = User_request.IN_PROGRESS
+    if request.method == 'POST':
+        request_id = request.POST.get('request_id')
+        feedback = request.POST.get('feedback')
+
+        # Найти заявку по ID
+        req = User_request.objects.get(id=request_id)
+
+        # Добавить замечания к заявке
+        req.feedback = feedback
+        # Изменить статус заявки на "в работе"
+        req.status = IN_PROGRESS
+        req.save()
+
+        return redirect(reverse('users:user_detail', kwargs={'pk': req.owner.pk}))
+
+    return render(request, 'users/user_detail.html')
+
+
 class BookingCreateView(CreateView):
     model = Booking
     form_class = BookingForm
@@ -183,6 +218,11 @@ class BookingCreateView(CreateView):
         self.object = form.save()
         self.object.owner = self.request.user
         self.object.save()
+        recipients = ['olga@noran.ru', 'khaidoukova@inbox.ru']
+        subject = f'Новое бронирование переговорки от {self.object.owner}'
+        message = f'Новое бронирование переговорки от {self.object.owner}:\nДата: {self.object.date}\nДлительность: {self.object.get_duration_display()}'
+        from_email = settings.EMAIL_HOST_USER
+        send_mail(subject, message, from_email, recipients)
 
         return super().form_valid(form)
 

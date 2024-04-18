@@ -6,66 +6,99 @@
 <div class="container mt-5">
     <div class="row">
         <h1 class="text-center">Заявки арендаторов</h1>
-        
-        
     </div>
 </div>
 
 
-<div class="=container mt-5">
-    
+<div class="container mt-5">
     <div class="container">
         <div class="row text-center rounded border">
-            <div class="col-2">
+            <div class="col-1">
                 <p>Дата</p>
             </div>
             <div class="col-1">
                 <p>Помещение</p>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <p>Арендатор</p>
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <p>Описание</p>
             </div>
             <div class="col-1">
                 <p>Срочность</p>
             </div>
-            <div class="col-1">
+            <div class="col-2">
                 <p>Статус</p>
             </div>
             <div class="col-2">
                 <p>Комментарий исполнителя</p>
             </div>
+            <div class="col-2">
+                <p>Комментарий арендатора</p>
+            </div>
         </div>
         {% for req in user_requests %}
         <div class="row text-center rounded border">
-            <div class="col-2">
-                <p><a href="{% url 'main:request_update' req.pk %}">{{ req.date }}</a></p>
+            <div class="col-1">
+                <p><a href="{% url 'main:request_update' pk=req.pk %}">{{ req.date }}</a></p>
             </div>
             <div class="col-1">
                 <p>{{ req.office_id }}</p>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <p>{{ req.owner.name }}</p>
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <p>{{ req.description }}</p>
             </div>
             <div class="col-1">
                 <p>{{ req.urgency }}</p>
             </div>
-            <div class="col-1">
-                <p>{{ req.status }}</p>
+            <div class="col-2">
+                <form method="POST" action="{% url 'main:request_status_update' req.pk %}">
+                    {% csrf_token %}
+                    <select name="new_status">
+                        {% for status in status_choices %}
+                            <option value="{{ status.0 }}" {% if status.0 == req.status %}selected{% endif %}>{{ status.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Изменить</button>
+                </form>
             </div>
             <div class="col-2">
                 <p>{{ req.comments }}</p>
             </div>
-            
+            <div class="col-2">
+                <p>{{ req.feedback }}</p>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.status-update-button').click(function() {
+            var request_id = $(this).data('request-id');
+            var new_status = $(this).data('new-status');
+            
+            $.ajax({
+                url: '/user-requests/update/' + request_id + '/',
+                type: 'POST',
+                data: {'new_status': new_status},
+                dataType: 'json',
+                success: function(data) {
+                    if (data.status === 'success') {
+                        location.reload();  // обновление текущей страницы
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ': ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

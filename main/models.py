@@ -52,7 +52,8 @@ class User_request(models.Model):
 
     DONE = 'выполнено'
     IN_PROGRESS = 'в работе'
-    STATUS = ((DONE, 'выполнено'), (IN_PROGRESS, 'в работе'))
+    CLOSED = 'завершено'
+    STATUS = ((DONE, 'выполнено'), (IN_PROGRESS, 'в работе'), (CLOSED, 'завершено'))
 
     date = models.DateTimeField(default=timezone.now, verbose_name='дата и время заявки')
     office_id = models.CharField(max_length=100, verbose_name='помещение')
@@ -64,6 +65,9 @@ class User_request(models.Model):
     status = models.CharField(max_length=20, choices=STATUS,
                               default=IN_PROGRESS, verbose_name='статус')
     comments = models.TextField(verbose_name='комментарий', blank=True, null=True)
+    feedback = models.TextField(verbose_name='комментарий отправителя заявки', blank=True, null=True)
+    date_completed = models.DateTimeField(verbose_name='дата и время выполнения заявки', blank=True, null=True)
+
 
     class Meta:
         verbose_name = 'Заявка'
@@ -81,6 +85,12 @@ class Booking(models.Model):
         (2, 'весь день'),
 
     )
+
+    APPROVED = 'Согласовано'
+    IN_PROGRESS = 'Отправлено на согласование'
+    STATUS = ((APPROVED, 'Согласовано'), (IN_PROGRESS, 'Отправлено на согласование'))
+
+
     date = models.DateField(default=timezone.now, verbose_name='дата')
 
     duration = models.IntegerField(choices=TIMESLOT_LIST,
@@ -89,6 +99,8 @@ class Booking(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                               verbose_name='арендатор',
                               null=True, blank=True)
+    status = models.CharField(max_length=100, choices=STATUS,
+                              default=IN_PROGRESS, verbose_name='статус')
 
     def __str__(self):
         return (f' Бронь переговорки:{self.date}, '

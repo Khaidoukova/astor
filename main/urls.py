@@ -6,7 +6,8 @@ from main.views import (CompanyListView, CompanyDetailView,
                         OfficeUpdateView, contacts, CompanyDeleteView,
                         OfficeDeleteView, BookingCreateView, CarsListView, CarsDetailView,
                         CarsCreateView, CarsUpdateView, CarsDeleteView, User_requestCreateView, User_requestListView,
-                        User_requestDetailView, User_requestDeleteView, User_requestUpdateView, info)
+                        User_requestDetailView, User_requestDeleteView, User_requestUpdateView, info, send_feedback,
+                        User_requestStatusUpdateView)
 
 app_name = MainConfig.name
 
@@ -34,4 +35,7 @@ urlpatterns = [
     path('request_list/', User_requestListView.as_view(), name='request_list'),
     path('request_update/<int:pk>', User_requestUpdateView.as_view(), name='request_update'),
     path('info/', info, name='info'),
+    path('send_feedback/', send_feedback, name='send_feedback'),
+    path('user-requests/update/<int:pk>/', User_requestStatusUpdateView.as_view(), name='request_status_update'),
+    path('booking_create/', BookingCreateView.as_view(), name='booking_create')
 ]

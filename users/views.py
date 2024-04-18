@@ -11,7 +11,7 @@ from django.urls import reverse_lazy, reverse
 
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView
 
-from main.models import User_request, Cars
+from main.models import User_request, Cars, Booking
 from users.forms import UserRegisterForm, UserForm, UserLoginForm
 from users.models import User
 
@@ -63,6 +63,9 @@ class UserDetailView(DetailView):
 
         cars = Cars.objects.filter(owner=user)
         context['cars'] = cars
+
+        booking = Booking.objects.filter(owner=user)
+        context['bookings'] = booking
 
         # Проверяем, является ли текущий пользователь владельцем страницы
         is_owner = self.request.user == user
