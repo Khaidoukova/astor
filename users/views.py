@@ -1,14 +1,7 @@
-import random
-import string
-
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
-
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView
 
 from main.models import User_request, Cars, Booking
@@ -59,6 +52,8 @@ class UserDetailView(DetailView):
         user = self.get_object()
 
         user_requests = User_request.objects.filter(owner=user)
+        for request in user_requests:
+            self.check_request_status(request)
         context['user_requests'] = user_requests
 
         cars = Cars.objects.filter(owner=user)
@@ -72,3 +67,12 @@ class UserDetailView(DetailView):
         context['is_owner'] = is_owner
 
         return context
+
+    def check_request_status(self, request):
+        if request.date_completed and request.status == 'выполнено':
+
+            one_week_ago = timezone.now() - timezone.timedelta(weeks=1)
+            if request.date_completed < one_week_ago:
+                request.status = 'завершено'
+                request.save()
+

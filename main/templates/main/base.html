@@ -83,9 +83,14 @@
           <a class="p-2 text-muted" href="{% url 'main:index' %}">ГЛАВНАЯ</a>
           <a class="p-2 text-muted" href="{% url 'main:info' %}">ДЦ "АСТОР"</a>         
           <a class="p-2 text-muted" href="#">СВОБОДНЫЕ ОФИСЫ</a>
+         {% if user.is_authenticated %}
           <a class="p-2 text-muted" href="{% url 'main:booking_create' %}">БРОНИРОВАНИЕ ПЕРЕГОВОРКИ</a>
+        {% else %}
+        <a class="p-2 text-muted" href="{% url 'users:login' %}">БРОНИРОВАНИЕ ПЕРЕГОВОРКИ</a>
+        {% endif %}
           {% if user.is_manager %}
           <a class="p-2 text-muted" href="{% url 'main:request_list' %}">ПОСМОТРЕТЬ ВСЕ ЗАЯВКИ</a>
+              <a class="p-2 text-muted" href="{% url 'main:cars_list' %}">АВТО</a>
           {% endif %}
           <a class="p-2 text-muted" href="{% url 'main:contacts' %}">КОНТАКТЫ</a>
         </nav>

@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -114,14 +116,9 @@ class Booking(models.Model):
 
 class Cars(models.Model):
     ONE_TIME = 'разовый'
-    WEEK = 'на неделю'
-    TWO_WEEKS = 'две недели'
-    MONTH = 'на месяц'
     PERMANENT = 'на постоянной основе'
     PERIOD = ((ONE_TIME, 'разовый'),
-              (WEEK, 'на неделю'),
-              (TWO_WEEKS, 'две недели'),
-              (MONTH, 'на месяц'),
+
               (PERMANENT, 'на постоянной основе'))
 
     APPROVED = 'Согласовано'
@@ -131,7 +128,9 @@ class Cars(models.Model):
     car_id = models.CharField(max_length=100, verbose_name='номер авто', unique=True)
     model = models.CharField(max_length=100, verbose_name='модель')
     period = models.CharField(max_length=20, choices=PERIOD,
-                              default=PERMANENT, verbose_name='период выдачи разрешения на доступ')
+                              default=PERMANENT, verbose_name='Или период выдачи разрешения на доступ')
+    start_date = models.DateField(default=datetime.date.today, verbose_name='Выберите дату начала доступа')
+    end_date = models.DateField(verbose_name='Выберите дату окончания доступа', blank=True, null=True)
     status = models.CharField(max_length=100, choices=STATUS,
                               default=IN_PROGRESS, verbose_name='статус')
     price = models.IntegerField(verbose_name='цена',

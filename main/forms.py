@@ -58,13 +58,20 @@ class BookingForm(StyleFormMixin, forms.ModelForm):
 
 
 class CarsForm(StyleFormMixin, forms.ModelForm):
-    class Meta:
-        model = Cars
-        fields = ('car_id', 'model', 'period', 'status', 'price')
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         if not self.request.user.is_manager:
             self.fields['price'].widget = forms.HiddenInput()
             self.fields['status'].widget = forms.HiddenInput()
+
+    class Meta:
+        model = Cars
+        fields = ('car_id', 'model', 'start_date', 'end_date', 'period', 'status', 'price')
+        widgets = {
+            # Виджеты для даты
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+

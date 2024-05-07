@@ -116,7 +116,7 @@ class User_requestListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['status_choices'] = User_request.STATUS
+        context['status_choices'] = [status for status in User_request.STATUS if status[0] != User_request.CLOSED]
         return context
 
 
@@ -229,7 +229,24 @@ class BookingCreateView(CreateView):
 
 class CarsListView(ListView):
     model = Cars
+    template_name = 'main/car_list.html'
 
+    def get_queryset(self):
+        queryset = Cars.objects.all()
+        approved_cars = queryset.filter(status=Cars.APPROVED)
+        in_progress_cars = queryset.filter(status=Cars.IN_PROGRESS)
+        expired_cars = queryset.filter(end_date__lt=timezone.now())
+        return {
+            'approved_cars': approved_cars,
+            'in_progress_cars': in_progress_cars,
+            'expired_cars': expired_cars,
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
+        context.update(queryset)
+        return context
 
 class CarsDetailView(DetailView):
     model = Cars

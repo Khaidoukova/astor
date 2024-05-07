@@ -60,7 +60,7 @@
                     {% csrf_token %}
                     <select name="new_status">
                         {% for status in status_choices %}
-                            <option value="{{ status.0 }}" {% if status.0 == req.status %}selected{% endif %}>{{ status.1 }}</option>
+                    <option value="{{ status.0 }}" {% if status.0 == req.status %}selected{% endif %}>{{ status.1 }}</option>
                         {% endfor %}
                     </select>
                     <button type="submit">Изменить</button>

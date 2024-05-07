@@ -1,0 +1,67 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="container mt-5">
+            <div class="row">
+                <h3 class="text-left">Cписок авто с актуальным доступом</h3>
+                <div class="col-md-3 p-3">
+                  
+                    </p>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Дата начала доступа</th>
+                        <th>Арендатор </th>
+                        <th>Номер офиса </th>
+                        <th>Телефон </th>
+                        <th>Номер авто</th>
+                        <th>Марка </th>
+                        <th>Статус заявки</th>
+                        <th>Дата окончания или период</th>
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for car in in_progress_cars %}
+                    <tr>
+                        <td>{{ car.start_date }}</td>
+                        <td>{{ car.owner.name }}</td>
+                        <td>{{ car.owner.office_number }}</td>
+                        <td>{{ car.owner.phone }}</td>
+                        <td>{{ car.car_id }}</td>
+                        <td>{{ car.model }}</td>
+                        <td>{{ car.status }}</td>
+                        <td>{% if car.end_date %}
+                            {{ car.end_date }}
+                            {% else %}
+                            {{ car.period }}
+                            {% endif %}
+                            
+                        </td>
+
+                        {% if is_owner %}
+                        <td>
+                            <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning"
+                               style="margin-bottom: 1mm;">Редактировать</a>
+                            <form action="{% url 'main:car_delete' competition.pk %}" method="post"
+                                  style="display: inline; margin-top: 1mm;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+{% endblock %}

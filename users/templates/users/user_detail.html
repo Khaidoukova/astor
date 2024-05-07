@@ -1,117 +1,121 @@
 {% extends 'main/base.html' %}
-{% block content%}
+{% block content %}
 
-<div class="container">
-    {% if is_owner %}
-    <div class="row mt-4 mb-4">
-
-    </div>
-    {% endif %}
-
-            <!-- часть с информацией о юзере -->
-            <div class="col-md-9">
-                <p><b>Имя:</b> {{ object_user.name }} </p>
-                <p><b>Электронная почта:</b> {{ object_user.email }} </p>
-                <p><b>Офис:</b> {{ object_user.office_number }} </p>
-                <p><b>Компания:</b> {{ object_user.company }}</p>
-                <p><b>Телефон для связи:</b> {{ object_user.phone }}</p>
-
-
+    <div class="container">
+        {% if is_owner %}
+            <div class="row mt-4 mb-4">
 
             </div>
-
-
-
-
-                  {% if is_owner %}
-                  <div class="col-md-12">
-                  <a href="{% url 'users:profile' %}" class="btn btn-custom">Редактировать профиль</a>
-                  <a href="{% url 'main:request_create' %}" class="btn btn-custom" >Создать заявку</a>
-
-                  <a href="{% url 'main:car_create' %}" class="btn btn-custom">Запросить доступ на территорию</a></div>
-                  {% endif %}
-                      <div class="col-md-12 border p-3 m-3">
-
-                            {% if user_requests %}
-                                <h2 class="bg-secondary text-light p-2">Ваши заявки*</h2>
-                                <p> *Здесь Вы видите Ваши заявки. Вы можете отправить замечание исполнителю, если качество выполнения заявки Вас не устроило, и статус заявки меняется на "в работе". Если замечания не отправлены в течение 5 дней после выполнения заявки и изменения статуса на "выполнено", заявка считается выполненной и закрывается.</p>
-                                  {% for req in user_requests %}
-                          <div class="col-md-offset-12">
-                                    <p><b>Дата:</b> {{ req.date }}</p>
-                                  <p><b>Офис:</b> {{ req.office_id }}</p>
-                              <p><b>Описание:</b> {{ req.description }}</p>
-                                  <p><b>Статус:</b> {{ req.status }}</p>
-                              {% if req.comments %}
-                              <p><b>Комментарий исполнителя:</b> {{ req.comments }}</p>
-                              {% endif %}
-                          {% if req.feedback %}
-                              <p><b>Комментарий отправителя заявки:</b> {{ req.feedback }}</p>
-                              {% endif %}
-                          {% if req.status != 'завершено' %}
-            <form method="POST" action="{% url 'main:send_feedback' %}">
-                {% csrf_token %}
-                <input type="hidden" name="request_id" value="{{ req.id }}">
-                <textarea name="feedback"></textarea>
-                <p><button type="submit" class="btn btn-custom">Отправить замечания</button></p>
-            </form>
-                              {% else %}
-                              <p>Заявка закрыта</p>
         {% endif %}
 
-                          </div>
-                                      {% if not loop.last %}
-            <hr>
+        <!-- часть с информацией о юзере -->
+        <div class="col-md-9">
+            <p><b>Имя:</b> {{ object_user.name }} </p>
+            <p><b>Электронная почта:</b> {{ object_user.email }} </p>
+            <p><b>Офис:</b> {{ object_user.office_number }} </p>
+            <p><b>Компания:</b> {{ object_user.company }}</p>
+            <p><b>Телефон для связи:</b> {{ object_user.phone }}</p>
+
+
+        </div>
+
+
+
+
+        {% if is_owner %}
+            <div class="col-md-12">
+                <a href="{% url 'users:profile' %}" class="btn btn-custom">Редактировать профиль</a>
+                <a href="{% url 'main:request_create' %}" class="btn btn-custom">Создать заявку</a>
+
+                <a href="{% url 'main:car_create' %}" class="btn btn-custom">Запросить доступ на территорию</a></div>
         {% endif %}
+        <div class="col-md-12 border p-3 m-3">
 
-                                  {% endfor %}
-                            {% else %}
-                                <p>У вас пока нет отправленных заявок в Службу Эксплуатаци</p>
-                            {% endif %}
+            {% if user_requests %}
+                <h2 class="bg-secondary text-light p-2">Ваши заявки*</h2>
+                <p> *Здесь Вы видите Ваши заявки. Вы можете отправить замечание исполнителю, если качество выполнения
+                    заявки Вас не устроило, и статус заявки меняется на "в работе". Если замечания не отправлены в
+                    течение 5 дней после выполнения заявки и изменения статуса на "выполнено", заявка считается
+                    выполненной и закрывается.</p>
+                {% for req in user_requests %}
+                    <div class="col-md-offset-12">
+                        <p><b>Дата:</b> {{ req.date }}</p>
+                        <p><b>Офис:</b> {{ req.office_id }}</p>
+                        <p><b>Описание:</b> {{ req.description }}</p>
+                        <p><b>Статус:</b> {{ req.status }}</p>
+                        {% if req.comments %}
+                            <p><b>Комментарий исполнителя:</b> {{ req.comments }}</p>
+                        {% endif %}
+                        {% if req.feedback %}
+                            <p><b>Комментарий отправителя заявки:</b> {{ req.feedback }}</p>
+                        {% endif %}
+                        {% if req.status != 'завершено' %}
+                            <form method="POST" action="{% url 'main:send_feedback' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="request_id" value="{{ req.id }}">
+                                <textarea name="feedback"></textarea>
+                                <p>
+                                    <button type="submit" class="btn btn-custom">Отправить замечания</button>
+                                </p>
+                            </form>
+                        {% else %}
+                            <p>Заявка закрыта</p>
+                        {% endif %}
+
+                    </div>
+                    {% if not loop.last %}
+                        <hr>
+                    {% endif %}
+
+                {% endfor %}
+            {% else %}
+                <p>У вас пока нет отправленных заявок в Службу Эксплуатаци</p>
+            {% endif %}
 
 
-                                <h2 class="bg-secondary text-light p-2">Доступ автомобилей на территорию</h2>
-{% if cars %}
-                                    {% for car in cars %}
-                                        <div class="col-md-offset-12">
+            <h2 class="bg-secondary text-light p-2">Доступ автомобилей на территорию</h2>
+            {% if cars %}
+                {% for car in cars %}
+                    <div class="col-md-offset-12">
 
-                                                        <p><b>Номер авто</b> {{ car.car_id }}</p>
-                                                        <p><b>Модель</b> {{ car.model }}</p>
-                                                        <p><b>Статус запроса</b> {{ car.status }}</p>
-</div>
-                                      {% if not loop.last %}
-            <hr>
-        {% endif %}
+                        <p><b>Номер авто</b> {{ car.car_id }}</p>
+                        <p><b>Модель</b> {{ car.model }}</p>
+                        <p><b>Статус запроса</b> {{ car.status }}</p>
+                    </div>
+                    {% if not loop.last %}
+                        <hr>
+                    {% endif %}
 
-                                {% endfor %}
-                            {% else %}
-                                <p>У вас пока нет запросов на доступ авто на территорию</p>
-                            {% endif %}
-                      <h2 class="bg-secondary text-light p-2">Бронирование переговорки</h2>
-{% if cars %}
-                                    {% for booking in bookings %}
-                                        <div class="col-md-offset-12">
+                {% endfor %}
+            {% else %}
+                <p>У вас пока нет запросов на доступ авто на территорию</p>
+            {% endif %}
+            <h2 class="bg-secondary text-light p-2">Бронирование переговорки</h2>
+            {% if cars %}
+                {% for booking in bookings %}
+                    <div class="col-md-offset-12">
 
-                                                        <p><b>Дата</b> {{ booking.date }}</p>
-                                                        <p><b>Время</b> {{ booking.get_duration_display }}</p>
-                                                        <p><b>Статус запроса</b> {{ booking.status }}</p>
-</div>
-                                      {% if not loop.last %}
-            <hr>
-        {% endif %}
+                        <p><b>Дата</b> {{ booking.date }}</p>
+                        <p><b>Время</b> {{ booking.get_duration_display }}</p>
+                        <p><b>Статус запроса</b> {{ booking.status }}</p>
+                    </div>
+                    {% if not loop.last %}
+                        <hr>
+                    {% endif %}
 
-                                {% endfor %}
-                            {% else %}
-                                <p>У вас пока нет бронирований переговорки</p>
-                            {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>У вас пока нет бронирований переговорки</p>
+            {% endif %}
 
-       </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
 
-                      </div>
+    </div>
 
 
 
