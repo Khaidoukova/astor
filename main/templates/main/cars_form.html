@@ -20,7 +20,11 @@
                 <div class="card-body">
                     {% csrf_token %}
                     {{ form.as_p }}
+                    {% if object %}
                     <button type="submit" class="btn btn-success">Отправить запрос</button>
+                    {% else %}
+                    <button type="submit" class="btn btn-success">Сохранить изменения</button>    
+                    {% endif %}
                 </div>
             </div>
         </div>

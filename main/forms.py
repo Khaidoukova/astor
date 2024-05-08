@@ -27,7 +27,7 @@ class OfficeForm(StyleFormMixin, forms.ModelForm):
 class User_requestForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = User_request
-        fields = ('office_id', 'description', 'urgency', 'status', 'comments', 'owner')
+        fields = ('office_id', 'description', 'urgency', 'status', 'comments')
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)

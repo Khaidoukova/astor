@@ -3,7 +3,10 @@ from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin,
                                         UserPassesTestMixin)
 from django.core.mail import send_mail
-from django.http import JsonResponse
+import openpyxl
+from openpyxl.utils import get_column_letter
+from django.http import HttpResponse
+from openpyxl.styles import Border, Side
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -11,7 +14,7 @@ from django.utils import timezone
 from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView,
                                   DeleteView, TemplateView, View)
-
+from openpyxl.styles import numbers
 from announcements.models import Announcement
 from news.models import News
 from .forms import CompanyForm, OfficeForm, User_requestForm, BookingForm, CarsForm
@@ -112,11 +115,24 @@ class OfficeDeleteView(LoginRequiredMixin,
 class User_requestListView(ListView):
     model = User_request
     template_name = 'main/user_request_list.html'
-    context_object_name = 'user_requests'
+
+
+    def get_queryset(self):
+        queryset = User_request.objects.all()
+        active_user_requests = queryset.filter(status=User_request.IN_PROGRESS)
+        done_user_requests = queryset.filter(status=User_request.DONE)
+        closed_user_requests = queryset.filter(status=User_request.CLOSED)
+        return {
+            'active_user_requests': active_user_requests,
+            'done_user_requests': done_user_requests,
+            'closed_user_requests': closed_user_requests,
+        }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status_choices'] = [status for status in User_request.STATUS if status[0] != User_request.CLOSED]
+        queryset = self.get_queryset()
+        context.update(queryset)
         return context
 
 
@@ -144,7 +160,7 @@ class User_requestDetailView(DetailView):
     model = User_request
 
 
-class User_requestCreateView(CreateView):
+class User_requestCreateView(LoginRequiredMixin, CreateView):
     model = User_request
     form_class = User_requestForm
     success_url = reverse_lazy('main:index')
@@ -156,6 +172,7 @@ class User_requestCreateView(CreateView):
         return kwargs
 
     def form_valid(self, form):
+        form.instance.owner = self.request.user
         self.object = form.save()
         if self.object.urgency == 'срочно':  # Check if urgency is "срочно"
             request_to_telegram(self.object.description, self.object.office_id)  # Call the function to send telegram message
@@ -248,13 +265,71 @@ class CarsListView(ListView):
         context.update(queryset)
         return context
 
+    def render_to_response(self, context, **response_kwargs):
+        if 'export_approved' in self.request.GET:
+            # Создаем новый файл Excel
+            wb = openpyxl.Workbook()
+            ws = wb.active
+
+            # Добавляем заголовки столбцов
+            headers = ['№', 'Номер авто', 'Модель', 'Период', 'Начало доступа', 'Окончание доступа', 'Арендатор',
+                       'Офис арендатора']
+            ws.append(headers)
+
+            # Применяем стиль границ для ячеек
+            thin_border = Border(left=Side(style='thin'), right=Side(style='thin'),
+                                 top=Side(style='thin'), bottom=Side(style='thin'))
+
+            # Автоматически устанавливаем ширину колонок для заголовков
+            for col in range(1, len(headers) + 1):
+                col_letter = get_column_letter(col)
+                ws.column_dimensions[col_letter].auto_fit = True
+
+            # Уменьшаем ширину колонки с номером вдвое
+            ws.column_dimensions[get_column_letter(1)].width = ws.column_dimensions[get_column_letter(1)].width / 2
+
+            # Добавляем данные из approved_cars
+            approved_cars = context['approved_cars']
+            row_number = 1
+            for car in approved_cars:
+                row = [row_number, car.car_id, car.model, car.period, car.start_date, car.end_date, car.owner.phone,
+                       car.owner.office_number]
+                ws.append(row)
+
+                # Применяем стиль границ для строки
+                for cell in ws[ws._current_row]:
+                    cell.border = thin_border
+
+                # Устанавливаем формат ячеек для дат
+                ws.cell(row=ws._current_row, column=5).number_format = 'dd.mm.yy'
+                ws.cell(row=ws._current_row, column=6).number_format = 'dd.mm.yy'
+
+                row_number += 1
+
+            # Автоматически устанавливаем ширину колонок после добавления данных
+            for col in range(1, len(headers) + 1):
+                col_letter = get_column_letter(col)
+                ws.column_dimensions[col_letter].auto_fit = True
+
+            # Устанавливаем параметр для печати всех данных по ширине на одну страницу
+            ws.print_area = 'A1:%s%d' % (get_column_letter(ws.max_column), ws.max_row)
+            ws.fit_to_pages = 1, 0  # Ширина, высота
+
+            # Создаем HTTP-ответ для скачивания файла
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename="approved_cars.xlsx"'
+            wb.save(response)
+            return response
+        else:
+            return super().render_to_response(context, **response_kwargs)
+
 class CarsDetailView(DetailView):
     model = Cars
 
 
 class CarsCreateView(CreateView):
     model = Cars
-    template_name = 'main/car_form.html'
+    template_name = 'main/cars_form.html'
     form_class = CarsForm
     success_url = reverse_lazy('main:index')
 
@@ -274,7 +349,7 @@ class CarsCreateView(CreateView):
 class CarsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Cars
     form_class = CarsForm
-    success_url = reverse_lazy('main:index')
+    success_url = reverse_lazy('main:cars_list')
 
     def test_func(self):
         user = self.request.user
@@ -284,13 +359,16 @@ class CarsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             return False
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
-class CarsDeleteView(LoginRequiredMixin,
-                     PermissionRequiredMixin,
-                     DeleteView):
+
+class CarsDeleteView(LoginRequiredMixin, DeleteView):
     model = Cars
     success_url = reverse_lazy('main:index')
-    permission_required = 'main.delete_testcategory'
+
 
 
 def info(request):

@@ -9,8 +9,11 @@
                 <div class="card-header">
                     <div class="card-title">
                         <h3 class="card-title">
+                            {% if user.is_manager %}
+                                Андрей Викторович, здесь можно изменить статус заявки, оставить комментарий или внести другие изменения.
+                            {% else %}
                             Форма для отправки заявки Службе Эксплуатации ДЦ "Астор"
-
+                            {% endif %}
                         </h3>
                     </div>
                 </div>
@@ -24,10 +27,7 @@
 
     </form>
         </div>
-    </div>
-</div>
-</div>
-</div>
+  
 
-</form>
+
 {% endblock %}

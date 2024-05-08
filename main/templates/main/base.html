@@ -88,10 +88,7 @@
         {% else %}
         <a class="p-2 text-muted" href="{% url 'users:login' %}">БРОНИРОВАНИЕ ПЕРЕГОВОРКИ</a>
         {% endif %}
-          {% if user.is_manager %}
-          <a class="p-2 text-muted" href="{% url 'main:request_list' %}">ПОСМОТРЕТЬ ВСЕ ЗАЯВКИ</a>
-              <a class="p-2 text-muted" href="{% url 'main:cars_list' %}">АВТО</a>
-          {% endif %}
+          
           <a class="p-2 text-muted" href="{% url 'main:contacts' %}">КОНТАКТЫ</a>
         </nav>
       </div>

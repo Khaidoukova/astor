@@ -5,11 +5,8 @@
 
 <div class="container mt-5">
             <div class="row">
-                <h3 class="text-left">Cписок авто с актуальным доступом</h3>
-                <div class="col-md-3 p-3">
-                  
-                    </p>
-                </div>
+                <h3 class="text-left">Cписок авто на согласование доступа</h3>
+               
                 <table class="table">
                     <thead>
                     <tr>
@@ -21,6 +18,8 @@
                         <th>Марка </th>
                         <th>Статус заявки</th>
                         <th>Дата окончания или период</th>
+                        <th>Стоимость</th>
+                        
                         
                     </tr>
                     </thead>
@@ -28,32 +27,33 @@
 
                     {% for car in in_progress_cars %}
                     <tr>
-                        <td>{{ car.start_date }}</td>
+                        <td>{{ car.start_date|date:"d.m.y" }}</td>
                         <td>{{ car.owner.name }}</td>
                         <td>{{ car.owner.office_number }}</td>
                         <td>{{ car.owner.phone }}</td>
                         <td>{{ car.car_id }}</td>
                         <td>{{ car.model }}</td>
-                        <td>{{ car.status }}</td>
+                        <td><span style="color:red;">{{ car.status }}</span></td>
                         <td>{% if car.end_date %}
-                            {{ car.end_date }}
+                            {{ car.end_date|date:"d.m.y" }}
                             {% else %}
                             {{ car.period }}
                             {% endif %}
                             
                         </td>
+                        <td>{{ car.price }}</td>
 
-                        {% if is_owner %}
+                       
                         <td>
                             <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning"
                                style="margin-bottom: 1mm;">Редактировать</a>
-                            <form action="{% url 'main:car_delete' competition.pk %}" method="post"
+                            <form action="{% url 'main:car_delete' car.pk %}" method="post"
                                   style="display: inline; margin-top: 1mm;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Удалить</button>
                             </form>
                         </td>
-                        {% endif %}
+                       
                     </tr>
 
                     {% endfor %}
@@ -61,6 +61,125 @@
                     </tbody>
                 </table>
             </div>
+<div class="row">
+                <h3 class="text-left">Cписок авто с актуальным доступом</h3>
+               <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'main:cars_list' %}?export_approved" class="btn btn-custom">
+             Скачать список в Excel
+        </a>
+    </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Дата начала доступа</th>
+                        <th>Арендатор </th>
+                        <th>Номер офиса </th>
+                        <th>Телефон </th>
+                        <th>Номер авто</th>
+                        <th>Марка </th>
+                        <th>Статус заявки</th>
+                        <th>Дата окончания или период</th>
+                        <th>Стоимость</th>
+                        
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for car in approved_cars %}
+                    <tr>
+                        <td>{{ car.start_date|date:"d.m.y" }}</td>
+                        <td>{{ car.owner.name }}</td>
+                        <td>{{ car.owner.office_number }}</td>
+                        <td>{{ car.owner.phone }}</td>
+                        <td>{{ car.car_id }}</td>
+                        <td>{{ car.model }}</td>
+                        <td><span style="color:green;">{{ car.status }}</span></td>
+                        <td>{% if car.end_date %}
+                            {{ car.end_date|date:"d.m.y" }}
+                            {% else %}
+                            {{ car.period }}
+                            {% endif %}
+                            
+                        </td>
+                        <td>{{ car.price }}</td>
+
+                       
+                        <td>
+                            <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning"
+                               style="margin-bottom: 1mm;">Редактировать</a>
+                            <form action="{% url 'main:car_delete' car.pk %}" method="post"
+                                  style="display: inline; margin-top: 1mm;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                       
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+<div class="row">
+                <h3 class="text-left">Cписок авто с истекшим сроком доступом</h3>
+               
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Дата начала доступа</th>
+                        <th>Арендатор </th>
+                        <th>Номер офиса </th>
+                        <th>Телефон </th>
+                        <th>Номер авто</th>
+                        <th>Марка </th>
+                        <th>Статус заявки</th>
+                        <th>Дата окончания или период</th>
+                        <th>Стоимость</th>
+                        
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for car in expired_cars %}
+                    <tr>
+                        <td>{{ car.start_date|date:"d.m.y" }}</td>
+                        <td>{{ car.owner.name }}</td>
+                        <td>{{ car.owner.office_number }}</td>
+                        <td>{{ car.owner.phone }}</td>
+                        <td>{{ car.car_id }}</td>
+                        <td>{{ car.model }}</td>
+                        <td><span style="color:red;">{{ car.status }}</span></td>
+                        <td>{% if car.end_date %}
+                            {{ car.end_date|date:"d.m.y" }}
+                            {% else %}
+                            {{ car.period }}
+                            {% endif %}
+                            
+                        </td>
+                        <td>{{ car.price }}</td>
+
+                       
+                        <td>
+                            <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning"
+                               style="margin-bottom: 1mm;">Редактировать</a>
+                            <form action="{% url 'main:car_delete' car.pk %}" method="post"
+                                  style="display: inline; margin-top: 1mm;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                       
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
 
