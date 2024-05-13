@@ -104,6 +104,8 @@ class Booking(models.Model):
     status = models.CharField(max_length=100, choices=STATUS,
                               default=IN_PROGRESS, verbose_name='статус')
 
+    comment = models.TextField(verbose_name='комментарий', null=True, blank=True)
+
     def __str__(self):
         return (f' Бронь переговорки:{self.date}, '
                 f'от арендатора {self.owner}')

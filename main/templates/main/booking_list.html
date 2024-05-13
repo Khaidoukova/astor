@@ -1,0 +1,121 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="container mt-5">
+            <div class="row">
+                <h3 class="text-left">Брони на согласование</h3>
+               
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Дата мероприятия</th>
+                        <th>Арендатор </th>
+                        <th>Номер офиса </th>
+                        <th>Телефон </th>
+                        <th>Длительность</th>                        
+                        <th>Статус заявки</th>
+                        <th>Комментарий</th>
+                      
+                        
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for b in received_booking %}
+                    <tr>
+                        <td>{{ b.date|date:"d.m.y" }}</td>
+                        <td>{{ b.owner.name }}</td>
+                        <td>{{ b.owner.office_number }}</td>
+                        <td>{{ b.owner.phone }}</td>
+                        <td>{{ b.get_duration_display }}</td>
+                        <td>
+                        <form method="POST" action="{% url 'main:booking_status_update' b.pk %}">
+                            {% csrf_token %}
+                            <select name="new_status">
+                                {% for status in status_choices %}
+                                    <option value="{{ status.0 }}"
+                                            {% if status.0 == b.status %}selected{% endif %}>{{ status.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Изменить</button>
+                        </form>
+                    </td>
+                        <td>{{ b.comment }}</td>
+                        
+                       
+                        <td>
+                            <a href="{% url 'main:booking_update' b.pk %}" class="btn btn-warning"
+                               style="margin-bottom: 1mm;">Редактировать</a>
+                        
+                        </td>
+                       
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+<div class="row">
+                <h3 class="text-left">Активные брони</h3>
+               
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Дата мероприятия</th>
+                        <th>Арендатор </th>
+                        <th>Номер офиса </th>
+                        <th>Телефон </th>
+                        <th>Длительность</th>                        
+                        <th>Статус заявки</th>
+                        <th>Комментарий</th>
+                      
+                        
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for b in approved_booking %}
+                    <tr>
+                        <td>{{ b.date|date:"d.m.y" }}</td>
+                        <td>{{ b.owner.name }}</td>
+                        <td>{{ b.owner.office_number }}</td>
+                        <td>{{ b.owner.phone }}</td>
+                        <td>{{ b.get_duration_display }}</td>
+                        <td>
+                        <form method="POST" action="{% url 'main:booking_status_update' b.pk %}">
+                            {% csrf_token %}
+                            <select name="new_status">
+                                {% for status in status_choices %}
+                                    <option value="{{ status.0 }}"
+                                            {% if status.0 == b.status %}selected{% endif %}>{{ status.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Изменить</button>
+                        </form>
+                    </td>
+                        <td>{{ b.comment }}</td>
+                        
+                       
+                        <td>
+                            <a href="{% url 'main:booking_update' b.pk %}" class="btn btn-warning"
+                               style="margin-bottom: 1mm;">Редактировать</a>
+                        
+                        </td>
+                       
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+</div>
+
+
+
+{% endblock %}

@@ -6,7 +6,7 @@
 <div class="container mt-5">
             <div class="row">
                 <h3 class="text-left">Cписок авто на согласование доступа</h3>
-               
+
                 <table class="table">
                     <thead>
                     <tr>
@@ -19,7 +19,7 @@
                         <th>Статус заявки</th>
                         <th>Дата окончания или период</th>
                         <th>Стоимость</th>
-                        
+
                         
                     </tr>
                     </thead>
@@ -43,7 +43,7 @@
                         </td>
                         <td>{{ car.price }}</td>
 
-                       
+
                         <td>
                             <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning"
                                style="margin-bottom: 1mm;">Редактировать</a>
@@ -53,7 +53,7 @@
                                 <button type="submit" class="btn btn-danger">Удалить</button>
                             </form>
                         </td>
-                       
+
                     </tr>
 
                     {% endfor %}
@@ -80,8 +80,8 @@
                         <th>Статус заявки</th>
                         <th>Дата окончания или период</th>
                         <th>Стоимость</th>
-                        
-                        
+
+
                     </tr>
                     </thead>
                     <tbody>
@@ -100,11 +100,11 @@
                             {% else %}
                             {{ car.period }}
                             {% endif %}
-                            
+
                         </td>
                         <td>{{ car.price }}</td>
 
-                       
+
                         <td>
                             <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning"
                                style="margin-bottom: 1mm;">Редактировать</a>
@@ -114,7 +114,7 @@
                                 <button type="submit" class="btn btn-danger">Удалить</button>
                             </form>
                         </td>
-                       
+
                     </tr>
 
                     {% endfor %}
@@ -124,7 +124,7 @@
             </div>
 <div class="row">
                 <h3 class="text-left">Cписок авто с истекшим сроком доступом</h3>
-               
+
                 <table class="table">
                     <thead>
                     <tr>
@@ -137,8 +137,8 @@
                         <th>Статус заявки</th>
                         <th>Дата окончания или период</th>
                         <th>Стоимость</th>
-                        
-                        
+
+
                     </tr>
                     </thead>
                     <tbody>
@@ -157,11 +157,11 @@
                             {% else %}
                             {{ car.period }}
                             {% endif %}
-                            
+
                         </td>
                         <td>{{ car.price }}</td>
 
-                       
+
                         <td>
                             <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning"
                                style="margin-bottom: 1mm;">Редактировать</a>
@@ -171,7 +171,7 @@
                                 <button type="submit" class="btn btn-danger">Удалить</button>
                             </form>
                         </td>
-                       
+
                     </tr>
 
                     {% endfor %}

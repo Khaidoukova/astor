@@ -116,7 +116,6 @@ class User_requestListView(ListView):
     model = User_request
     template_name = 'main/user_request_list.html'
 
-
     def get_queryset(self):
         queryset = User_request.objects.all()
         active_user_requests = queryset.filter(status=User_request.IN_PROGRESS)
@@ -155,7 +154,6 @@ class User_requestStatusUpdateView(View):
         return redirect('main:request_list')
 
 
-
 class User_requestDetailView(DetailView):
     model = User_request
 
@@ -175,7 +173,8 @@ class User_requestCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         self.object = form.save()
         if self.object.urgency == 'срочно':  # Check if urgency is "срочно"
-            request_to_telegram(self.object.description, self.object.office_id)  # Call the function to send telegram message
+            request_to_telegram(self.object.description,
+                                self.object.office_id)  # Call the function to send telegram message
         return super().form_valid(form)
 
 
@@ -242,6 +241,57 @@ class BookingCreateView(CreateView):
         send_mail(subject, message, from_email, recipients)
 
         return super().form_valid(form)
+
+
+class BookingListView(ListView):
+    model = Booking
+    template_name = 'main/booking_list.html'
+
+    def get_queryset(self):
+        queryset = Booking.objects.all()
+        received_booking = queryset.filter(status=Booking.IN_PROGRESS)
+        approved_booking = queryset.filter(status=Booking.APPROVED)
+        closed_booking = queryset.filter(date__lt=timezone.now())
+        return {
+            'received_booking': received_booking,
+            'approved_booking': approved_booking,
+            'closed_booking': closed_booking,
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
+        context['status_choices'] = Booking.STATUS
+        context.update(queryset)
+        return context
+
+
+class BookingUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Booking
+    form_class = BookingForm
+    success_url = reverse_lazy('main:booking_list')
+
+    def test_func(self):
+        user = self.request.user
+
+        if user.is_staff or user.is_superuser or user.is_manager:
+            return True
+        else:
+            return False
+
+class BookingStatusUpdateView(View):
+    def post(self, request, *args, **kwargs):
+        booking_id = kwargs['pk']
+        new_status = request.POST.get('new_status')
+
+        booking = get_object_or_404(Booking, pk=booking_id)
+
+        if new_status != booking.status:  # Проверка изменения статуса
+            booking.status = new_status
+
+
+            booking.save()
+        return redirect('main:booking_list')
 
 
 class CarsListView(ListView):
@@ -323,6 +373,7 @@ class CarsListView(ListView):
         else:
             return super().render_to_response(context, **response_kwargs)
 
+
 class CarsDetailView(DetailView):
     model = Cars
 
@@ -368,7 +419,6 @@ class CarsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class CarsDeleteView(LoginRequiredMixin, DeleteView):
     model = Cars
     success_url = reverse_lazy('main:index')
-
 
 
 def info(request):
